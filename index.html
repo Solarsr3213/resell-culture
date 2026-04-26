@@ -1507,7 +1507,6 @@ footer {
         <div class="vcat-tabs">
           <button class="vcat-tab active" onclick="switchVCat('all', this)">All</button>
           <button class="vcat-tab" onclick="switchVCat('clothing', this)">🧥 Clothing</button>
-          <button class="vcat-tab" onclick="switchVCat('accessories', this)">⌚ Watches</button>
           <button class="vcat-tab" onclick="switchVCat('shoes', this)">👟 Shoes</button>
           <button class="vcat-tab" onclick="switchVCat('electronics', this)">🎧 Electronics</button>
           <button class="vcat-tab" onclick="switchVCat('fragrance', this)">🌸 Fragrance</button>
@@ -3689,9 +3688,16 @@ function _mkId() {
 }
 
 function _seedProducts() {
-  var SEED_VERSION = 'rc_v3';
+  var SEED_VERSION = 'rc_v4';
   if (localStorage.getItem('rc_seed_version') === SEED_VERSION) return;
-  saveProducts([
+  // Remove all old resellculture.com (rc_) products — keeping only DHgate items
+  var existing = getProducts().filter(function(p){ return !p.id || !p.id.startsWith('rc_'); });
+  saveProducts(existing);
+  localStorage.setItem('rc_seed_version', SEED_VERSION);
+}
+function _seedProducts_REMOVED() {
+  // old rc_ products removed at user request
+  var _unused = [
     {"id":"rc_001","name":"Polo Shirts | 8 PACK","desc":"Unlock exclusive access to a curated collection of premium men's polo shirts. Our Men's Polo Shirts Supplier Links connect you directly to top-quality","price":80.99,"origPrice":350,"category":"clothing","imageUrl":"https://cdn.shopify.com/s/files/1/0905/6400/2134/files/IMG-9206.png","available":true,"created":"2026-04-26T22:00:00.000Z","sourceUrl":"https://resellculture.com/products/polo-shirts-8-pack"},
     {"id":"rc_002","name":"Datejust Chocolate","desc":"Premium replica Datejust — chocolate dial, comes with box and papers.","price":84.99,"origPrice":174.99,"category":"accessories","imageUrl":"https://cdn.shopify.com/s/files/1/0905/6400/2134/files/IMG-8891.png","available":true,"created":"2026-04-26T22:00:00.000Z","sourceUrl":"https://resellculture.com/products/datejust-chocolate"},
     {"id":"rc_003","name":"Datejust Smoke Gray","desc":"Premium replica Datejust — smoke gray dial, comes with box and papers.","price":84.99,"origPrice":174.99,"category":"accessories","imageUrl":"https://cdn.shopify.com/s/files/1/0905/6400/2134/files/IMG-8890.png","available":true,"created":"2026-04-26T22:00:00.000Z","sourceUrl":"https://resellculture.com/products/datejust-smoke-gray"},
@@ -3736,8 +3742,7 @@ function _seedProducts() {
     {"id":"rc_042","name":"Vintage Clothing Box","desc":"Gain exclusive access to a top supplier of Vintage Mystery Boxes. Our Supplier Links connect you directly to high-quality vintage and preloved sweater","price":54.99,"origPrice":64.99,"category":"clothing","imageUrl":"https://cdn.shopify.com/s/files/1/0905/6400/2134/files/IMG-8614.png","available":true,"created":"2026-04-26T22:00:00.000Z","sourceUrl":"https://resellculture.com/products/vintage-clothing-and-mystery-box-suppliers"},
     {"id":"rc_043","name":"Branded Shirts | 4 PACK","desc":"Get exclusive access to a top-tier supplier of vintage shirts. Our Branded Shirts Supplier Links connect you directly to high-quality vintage designer","price":44.99,"origPrice":140,"category":"clothing","imageUrl":"https://cdn.shopify.com/s/files/1/0905/6400/2134/files/IMG-2135brandeedshirts-Photoroom.webp","available":true,"created":"2026-04-26T22:00:00.000Z","sourceUrl":"https://resellculture.com/products/branded-shirt-suppliers"},
     {"id":"rc_044","name":"Polo Shirts | 4 PACK","desc":"Unlock exclusive access to a curated collection of premium men's polo shirts. Our Men's Polo Shirts Supplier Links connect you directly to top-quality","price":50.99,"origPrice":250,"category":"clothing","imageUrl":"https://cdn.shopify.com/s/files/1/0905/6400/2134/files/IMG-9203.png","available":true,"created":"2026-04-26T22:00:00.000Z","sourceUrl":"https://resellculture.com/products/polo-shirt-suppliers"}
-  ]);
-  localStorage.setItem('rc_seed_version', SEED_VERSION);
+  ];
 }
 
 const CAT_ICONS = { clothing:'🧥', shoes:'👟', electronics:'🎧', accessories:'💎', fragrance:'🌸', other:'📦' };
